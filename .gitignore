@@ -1,0 +1,5 @@
+label.csv
+.idea
+model_trained.pkl
+model_trained.p
+MyData/*
