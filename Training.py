@@ -8,7 +8,6 @@ from keras.layers import Dropout, Flatten
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 import cv2
 from sklearn.model_selection import train_test_split
-import pickle
 import os
 import pandas as pd
 import random
@@ -19,8 +18,8 @@ from keras.preprocessing.image import ImageDataGenerator
 path = "myData"  # folder with all the class folders
 labelFile = 'labels.csv'  # file with all names of classes
 batch_size_val = 50  # how many to process together
-steps_per_epoch_val = 200
-epochs_val = 1
+steps_per_epoch_val = 300
+epochs_val = 30
 imageDimesions = (32, 32, 3)
 testRatio = 0.2  # if 1000 images split will 200 for testing
 validationRatio = 0.2  # if 1000 images 20% of remaining 800 will be 160 for validation
@@ -28,6 +27,7 @@ validationRatio = 0.2  # if 1000 images 20% of remaining 800 will be 160 for val
 
 
 ############################### Importing of the Images
+
 count = 0
 images = []  # 91;]
 classNo = []  # 91;]
@@ -208,8 +208,5 @@ print('Test Score:', score[0])
 print('Test Accuracy:', score[1])
 
 
-# STORE THE MODEL AS A PICKLE OBJECT
-pickle_out = open("model_trained.p", "wb")  # wb = WRITE BYTE
-pickle.dump(model, pickle_out)
-# pickle_out.close()
-# cv2.waitKey(0)
+# STORE THE MODEL
+model.save("model_trained")

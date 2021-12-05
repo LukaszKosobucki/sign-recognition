@@ -2,3 +2,4 @@
 model_trained.pkl
 model_trained.p
 MyData/*
+model_trained/*

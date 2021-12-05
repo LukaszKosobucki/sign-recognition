@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import pickle
+import keras
 
 #############################################
 
@@ -17,9 +18,9 @@ cap.set(3, frameWidth)
 cap.set(4, frameHeight)
 cap.set(10, brightness)
 # IMPORT THE TRANNIED MODEL
-pickle_in = open("model_trained.p", "rb")  ## rb = READ BYTE
-model = pickle.load(pickle_in)
-
+# pickle_in = open("model_trained.p", "rb")  ## rb = READ BYTE
+# model = pickle.load(pickle_in)
+model = keras.models.load_model("model_trained")
 
 def grayscale(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -133,10 +134,17 @@ def getCalssName(classNo):
         return 'End of no passing by vechiles over 3.5 metric tons'
 
 
+print("1 for camera, 0 for static loaded image")
+x = int(input())
+
+
 while True:
 
     # READ IMAGE
-    success, imgOrignal = cap.read()
+    if x == 0:
+        imgOrignal = cv2.imread('stop.jpg')
+    else:
+        success, imgOrignal = cap.read()
 
     # PROCESS IMAGE
     img = np.asarray(imgOrignal)
@@ -148,7 +156,8 @@ while True:
     cv2.putText(imgOrignal, "PROBABILITY: ", (20, 75), font, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
     # PREDICT IMAGE
     predictions = model.predict(img)
-    classIndex = model.predict_classes(img)
+    # classIndex = model.predict_classes(img)
+    classIndex = np.argmax(predictions, axis=1)
     probabilityValue = np.amax(predictions)
     if probabilityValue > threshold:
         # print(getCalssName(classIndex))
